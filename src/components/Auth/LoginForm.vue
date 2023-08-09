@@ -24,6 +24,7 @@
         <ErrorMessage class="text-red-600" name="password" />
       </div>
       <button
+        @click.prevent="login"
         type="submit"
         class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
       >
@@ -33,6 +34,10 @@
   </div>
 </template>
 <script>
+import { mapStores } from "pinia";
+import useUserStore from "../../stores/User.State";
+import useModalStore from "../../stores/Modal.State";
+
 export default {
   name: "LoginForm",
   data() {
@@ -43,9 +48,16 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapStores(useUserStore, "isLoggedIn"),
+    ...mapStores(useModalStore, "isOpen"),
+  },
   methods: {
-    login(values) {
-      console.log(values);
+    login() {
+      this.userStore.isLoggedIn = true;
+      setTimeout(() => {
+        this.modalStore.isOpen = false;
+      }, 1000);
     },
   },
 };
